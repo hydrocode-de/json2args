@@ -92,4 +92,5 @@ def parse_parameter() -> dict:
     .. deprecated:: 
         Use get_parameter instead
     """
+    print('[FutureWarning]: parse_parameters is deprecated and will be removed with one of the next releases. Please use get_parameters.')
     return get_parameter()
