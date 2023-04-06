@@ -5,6 +5,8 @@ parse the tool configuration and the parameters.
 import os
 import json
 from yaml import load, Loader
+from itertools import chain
+
 import numpy as np
 import pandas as pd
 
@@ -28,7 +30,7 @@ def read_config() -> dict:
 def _parse_param(key: str, val: str, param_config: dict):
     # switch the type
     c = param_config[key]
-
+    
     # handle arrays
     # TODO: add an optional shape parameter. if set -> np.flatten().reshape(shape)
     if isinstance(val, (list, tuple)):
@@ -80,9 +82,15 @@ def get_parameter() -> dict:
 
     # container for parsed arguments
     kwargs = {}
-    
+
+    # get all parameters from param_config that have a default value and are not optional to parse default values
+    default_params = {name: x.get('default') for name, x in param_conf.items()  if x.get('default') is not None and 'optional' not in x.keys()}
+
+    # combine parameters from param_file and default parameters
+    params2parse = chain(p[section].items(), default_params.items())
+
     # parse all parameter
-    for key, value in p[section].items():
+    for key, value in params2parse:
         kwargs[key] = _parse_param(key, value, param_conf)
 
     return kwargs
