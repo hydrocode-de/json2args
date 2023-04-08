@@ -30,7 +30,7 @@ def read_config() -> dict:
 def _parse_param(key: str, val: str, param_config: dict):
     # switch the type
     c = param_config[key]
-    
+
     # handle arrays
     # TODO: add an optional shape parameter. if set -> np.flatten().reshape(shape)
     if isinstance(val, (list, tuple)):
@@ -84,7 +84,7 @@ def get_parameter() -> dict:
     kwargs = {}
 
     # get all parameters from param_config that have a default value and are not optional to parse default values
-    default_params = {name: x.get('default') for name, x in param_conf.items()  if x.get('default') is not None and 'optional' not in x.keys()}
+    default_params = {name: x.get('default') for name, x in param_conf.items() if x.get('default') is not None and x.get('optional')==False}
 
     # combine parameters from param_file and default parameters
     params2parse = chain(p[section].items(), default_params.items())
