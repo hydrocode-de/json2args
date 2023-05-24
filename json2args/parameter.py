@@ -61,6 +61,24 @@ def _parse_param(key: str, val: str, param_config: dict):
             with open(val, 'r') as f:
                 val = json.load(f)
         return val
+    elif t.lower() in ('integer', 'float'):
+        # check for min and max values in config
+        min = c.get('min', None)
+        max = c.get('max', None)
+
+        # check wether val is in min and max range
+        if min and max:
+            # check if min is smaller than max
+            if max <= min:
+                raise ValueError(f"There is an error in your parameter configuration / tool.yml, as the given minimum value ({min}) for parameter '{key}' is higher than or equal to the maximum number ({max}).")
+            elif not (min <= val <= max):
+                raise ValueError(f"{key} is {val}, but it must be between {min} and {max}.")
+        elif min and not min <= val:
+            raise ValueError(f"{key} is {val}, but must be higher than {min}.")
+        elif max and not val <= max:
+            raise ValueError(f"{key} is {val}, but must be smaller than {max}.")
+        else:
+            return val
     else:
         return val
 
