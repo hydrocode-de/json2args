@@ -69,8 +69,8 @@ def _parse_param(key: str, val: str, param_config: dict):
         # check wether val is in min and max range
         if min and max:
             # check if min is smaller than max
-            if max < min:
-                raise ValueError(f"There is an error in your parameter configuration / tool.yml, as the given minimum value ({min}) for parameter '{key}' is higher than the maximum number ({max}).")
+            if max <= min:
+                raise ValueError(f"There is an error in your parameter configuration / tool.yml, as the given minimum value ({min}) for parameter '{key}' is higher than or equal to the maximum number ({max}).")
             elif not (min <= val <= max):
                 raise ValueError(f"{key} is {val}, but it must be between {min} and {max}.")
         elif min and not min <= val:
