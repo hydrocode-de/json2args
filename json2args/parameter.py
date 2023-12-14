@@ -4,32 +4,21 @@ parse the tool configuration and the parameters.
 """
 import os
 import json
-from yaml import load, Loader
 from itertools import chain
 
-import numpy as np
-import pandas as pd
+from dateutil.parser import parse, isoparse
 
-
-CONF_FILE = '/src/tool.yml'
-PARAM_FILE = '/in/parameters.json'
-
-def get_env() -> dict:
-    return {
-        'conf_file': os.environ.get('CONF_FILE', CONF_FILE),
-        'param_file': os.environ.get('PARAM_FILE', PARAM_FILE)
-    }
-
-
-def read_config() -> dict:
-    # get the config file
-    with open(get_env()['conf_file'], 'r') as f:
-        return load(f.read(), Loader=Loader)
+from json2args.exceptions import ParameterConfigMissingError
+from json2args.util import get_param_and_config
 
 
 def _parse_param(key: str, val: str, param_config: dict):
     # switch the type
-    c = param_config[key]
+    try:
+        c = param_config[key]
+    except KeyError:
+        msg = f"The pair {key}: {val} could not be parsed. The config does not contain a specification for {key}. Check the tool.yml and input.json for misspellings first."
+        raise ParameterConfigMissingError(msg)
 
     # handle arrays
     # TODO: add an optional shape parameter. if set -> np.flatten().reshape(shape)
@@ -45,22 +34,16 @@ def _parse_param(key: str, val: str, param_config: dict):
         if val not in c['values']:
             raise ValueError(f"The value {val} is not contained in {c['values']}")
         return val
+    
+    # strings
     elif t.lower() in ('datetime', 'date', 'time'):
-        # TODO: implement this
-        raise NotImplementedError
-    elif t == 'file':
-        # get the ext and use the corresponding reader
-        _, ext = os.path.splitext(val)
-        
-        # use numpy for matrix files
-        if ext.lower() == '.dat':
-            val = np.loadtxt(val)
-        elif ext.lower() == '.csv':
-            val = pd.read_csv(val)
-        elif ext.lower() == '.json':
-            with open(val, 'r') as f:
-                val = json.load(f)
+        # first try ISO 8601
+        val = isoparse(val)
+        if val is None:
+            val = parse(val)
         return val
+    
+    # integer and float
     elif t.lower() in ('integer', 'float'):
         # check for min and max values in config
         min = c.get('min', None)
@@ -77,26 +60,27 @@ def _parse_param(key: str, val: str, param_config: dict):
             raise ValueError(f"{key} is {val}, but must be higher than {min}.")
         elif max and not val <= max:
             raise ValueError(f"{key} is {val}, but must be smaller than {max}.")
+        
+        # if no exception rasised, return the value
+        if t.lower() == 'integer':
+            return int(val)
         else:
-            return val
+            return float(val)
+    
+    # bools
+    elif t.lower() in ('boolean', 'bool'):
+        return bool(val)
     else:
         return val
 
 
-def get_parameter() -> dict:
-    # load the parameter file
-    with open(get_env()['param_file']) as f:
-        p = json.load(f)
+def get_parameter(**kwargs) -> dict:
+    # load params and config
+    param, param_conf = get_param_and_config(**kwargs)
 
-    # load the config
-    config = read_config()
-
-    # load only the first section
-    # TODO: later, this should work on more than one tool
-    section = os.environ.get('TOOL_RUN', list(p.keys())[0])
-
-    # find parameters in config
-    param_conf = config['tools'][section]['parameters']
+    # for get parameter, we are only interested in the parameters section
+    # parameters can be empty by default
+    param = param.get('parameters', {})
 
     # container for parsed arguments
     kwargs = {}
@@ -105,7 +89,8 @@ def get_parameter() -> dict:
     default_params = {name: x.get('default') for name, x in param_conf.items() if x.get('default') is not None and x.get('optional', False)==False}
 
     # combine parameters from param_file and default parameters
-    params2parse = chain(p[section].items(), default_params.items())
+    # defaults have to go first, so that they can be overwritten by the params
+    params2parse = chain(default_params.items(), param.items())
 
     # parse all parameter
     for key, value in params2parse:
