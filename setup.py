@@ -28,5 +28,9 @@ setup(
     license='MIT',
     version=version(),
     packages=find_packages(),
-    install_requires=requirements()
+    install_requires=requirements(),
+    extras_require={
+        'tests': ['pytest', 'pytest-cov'],
+        'preload': ['pandas', 'polars', 'pyarrow', 'xarray', 'netCDF4']
+    }
 )

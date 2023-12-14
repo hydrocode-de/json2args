@@ -1,9 +1,3 @@
 pyyaml
-numpy
-pandas
-polars
-pyarrow
-xarray
-netCDF4
 python-dateutil
 typing-extensions

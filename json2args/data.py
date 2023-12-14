@@ -4,9 +4,13 @@ from pathlib import Path
 from glob import glob
 import json
 
-import numpy as np
-import polars as pl
-import xarray as xr
+try:
+    import numpy as np
+    import polars as pl
+    import xarray as xr
+    WITH_PRELOAD = True
+except ImportError:
+    WITH_PRELOAD = False
 
 from json2args.exceptions import FileExtensionError, ToolConfigMissingError
 from json2args.util import get_data_and_config
@@ -88,6 +92,8 @@ def _preload_dataset(key: str, value: str, data_conf: dict):
 
 
 def get_data(datasets: Union[Literal['all'], str, List[str]] = 'all', as_dict: bool = False, **kwargs) -> dict:
+    if not WITH_PRELOAD:
+        raise ImportError("The preload extras are not installed. Please install json2args with `pip install json2args[preload]`. If you only need the data paths, use `json2args.get_data_paths`")
     # load params and config
     data_param, data_conf = get_data_and_config(**kwargs)
 
