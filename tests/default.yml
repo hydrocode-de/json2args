@@ -1,0 +1,30 @@
+tools:
+  foo:
+    description: Foo tool
+    parameters:
+      foo_int:
+        type: integer
+        min: 5
+        max: 90
+      foo_float:
+        type: float
+        optional: true
+      foo_string:
+        type: str
+        default: "foo"
+      foo_float_array:
+        type: float
+        array: true
+      foo_enum:
+        type: enum
+        values:
+          - foo
+          - bar
+          - baz
+      foo_bool:
+        type: boolean
+        default: false
+      foo_time:
+        type: datetime
+    data:
+      - iris
