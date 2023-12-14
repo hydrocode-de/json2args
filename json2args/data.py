@@ -42,9 +42,9 @@ def _preload_dataset(key: str, value: str, data_conf: dict):
     
     # otherwise the input is allowed - check if we have a wildcard
     if '*' in value:
-        paths = [Path(value).resolve()]
-    else:
         paths = [Path(v).resolve() for v in glob(value)]
+    else:
+        paths = [Path(value).resolve()]
 
     # check if the file exists
     for path in paths:
