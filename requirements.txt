@@ -1,4 +1,7 @@
 pyyaml
 numpy
 pandas
+polars
+xarray
+netCDF4
 python-dateutil
