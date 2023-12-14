@@ -3,7 +3,7 @@ from pathlib import Path
 from datetime import datetime as dt
 
 import pytest
-from json2args.exceptions import ParameterConfigMissingError
+from json2args.exceptions import ToolConfigMissingError
 
 from json2args.util import get_param_and_config, _raw_read_files
 from json2args.parameter import _parse_param, get_param_and_config, get_parameter
@@ -81,7 +81,7 @@ def test_fail_on_enum():
 def test_missing_config():
     _, params_conf = get_param_and_config(**kwargs)
 
-    with pytest.raises(ParameterConfigMissingError) as e:
+    with pytest.raises(ToolConfigMissingError) as e:
         _parse_param('foo_missing', 'nan', params_conf)
     
     assert 'The pair foo_missing: nan could not be parsed' in str(e.value)

@@ -8,7 +8,7 @@ from itertools import chain
 
 from dateutil.parser import parse, isoparse
 
-from json2args.exceptions import ParameterConfigMissingError
+from json2args.exceptions import ToolConfigMissingError
 from json2args.util import get_param_and_config
 
 
@@ -18,7 +18,7 @@ def _parse_param(key: str, val: str, param_config: dict):
         c = param_config[key]
     except KeyError:
         msg = f"The pair {key}: {val} could not be parsed. The config does not contain a specification for {key}. Check the tool.yml and input.json for misspellings first."
-        raise ParameterConfigMissingError(msg)
+        raise ToolConfigMissingError(msg)
 
     # handle arrays
     # TODO: add an optional shape parameter. if set -> np.flatten().reshape(shape)

@@ -1,4 +1,4 @@
 # introduce some specific exceptions
 
-class ParameterConfigMissingError(ValueError):
+class ToolConfigMissingError(ValueError):
     pass
