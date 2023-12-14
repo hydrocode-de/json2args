@@ -26,7 +26,7 @@ jobs:
         uses: codecov/codecov-action@v3
         if: matrix.python-version == '3.9'
         with:
-          file: ./coverage.xml
+          file: coverage.xml
           fail_ci_if_error: false
           verbose: true
         env:
