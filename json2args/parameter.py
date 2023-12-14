@@ -78,10 +78,6 @@ def get_parameter(**kwargs) -> dict:
     # load params and config
     param, param_conf = get_param_and_config(**kwargs)
 
-    # for get parameter, we are only interested in the parameters section
-    # parameters can be empty by default
-    param = param.get('parameters', {})
-
     # container for parsed arguments
     kwargs = {}
 

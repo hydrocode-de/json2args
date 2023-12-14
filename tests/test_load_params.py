@@ -5,7 +5,7 @@ from datetime import datetime as dt
 import pytest
 from json2args.exceptions import ParameterConfigMissingError
 
-from json2args.util import get_param_and_config
+from json2args.util import get_param_and_config, _raw_read_files
 from json2args.parameter import _parse_param, get_param_and_config, get_parameter
 
 
@@ -21,18 +21,21 @@ kwargs = dict(
 
 def test_load_files():
     # get the params and their config
-    params, param_conf = get_param_and_config(**kwargs)
-
+    sec, params, param_conf = _raw_read_files(**kwargs)
+    
+    # parse the conf like the parsers would do
+    conf = param_conf['tools'][sec]['parameters']
     # add some asserts on param_conf
     assert isinstance(param_conf, dict)
-    assert len(param_conf) == 7
-    assert param_conf['foo_float'].get('optional', False) == True
+    assert isinstance(conf, dict)
+    assert len(conf) == 7
+    assert conf['foo_float'].get('optional', False) == True
     
     # add some asserts on params
     assert isinstance(params, dict)
-    assert len(params) == 2
-    assert 'parameters' in params
-    assert 'data' in params
+    assert len(params[sec]) == 2
+    assert 'parameters' in params[sec]
+    assert 'data' in params[sec]
 
 
 def test_parse_literal():
