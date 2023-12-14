@@ -5,3 +5,4 @@ polars
 xarray
 netCDF4
 python-dateutil
+typing-extensions
