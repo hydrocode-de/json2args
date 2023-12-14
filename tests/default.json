@@ -11,7 +11,7 @@
 
         },
         "data": {
-            "iris": "iris.csv"
+            "iris": "./tests/dataframe.csv"
         }
     }
 }
