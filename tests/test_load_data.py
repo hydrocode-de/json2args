@@ -63,6 +63,7 @@ def test_load_single_nc():
     assert isinstance(era5, xr.Dataset)
     assert len(era5.dims) == 3
     assert era5.swvl2.to_numpy().shape == (1, 77, 91)
+    era5.close()
 
 
 def test_load_batched_nc():
@@ -73,3 +74,4 @@ def test_load_batched_nc():
     assert isinstance(era5, xr.Dataset)
     assert len(era5.dims) == 3
     assert era5.swvl2.to_numpy().shape == (4, 77, 91)  # loaded 4 monthly chunks
+    era5.close()
