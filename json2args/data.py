@@ -69,7 +69,7 @@ def _preload_dataset(key: str, value: str, data_conf: dict):
         if len(paths) == 1:
             return xr.open_dataset(paths[0])
         else:
-            return xr.open_mfdataset(paths, parallel=True)
+            return xr.open_mfdataset(paths, parallel=True, engine='netcdf4')
 
     # json
     elif ext == '.json':
