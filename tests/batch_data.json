@@ -11,7 +11,9 @@
 
         },
         "data": {
-            "iris": "./tests/batch*.csv"
+            "iris": "./tests/batch*.csv",
+            "march": "./tests/era5_march.nc",
+            "era5": "./tests/era5_*.nc"
         }
     }
 }

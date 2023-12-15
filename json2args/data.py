@@ -69,7 +69,7 @@ def _preload_dataset(key: str, value: str, data_conf: dict):
         if len(paths) == 1:
             return xr.open_dataset(paths[0])
         else:
-            return xr.open_mfdataset(paths, parallel=True)
+            return xr.open_mfdataset(paths, parallel=True, engine='netcdf4')
 
     # json
     elif ext == '.json':
@@ -125,6 +125,7 @@ def get_data(datasets: Union[Literal['all'], str, List[str]] = 'all', as_dict: b
             return datatsets[0]
         else:
             return datatsets
+
 
 def get_data_paths(**kwargs):
     # load params and config
