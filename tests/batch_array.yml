@@ -1,0 +1,10 @@
+tools:
+  arange:
+    description: Dummy tool to load test array batches
+    parameter:
+      foo:
+        type: integer
+        default: 42
+    data:
+      - arr
+      - batch_arr
