@@ -126,6 +126,7 @@ def get_data(datasets: Union[Literal['all'], str, List[str]] = 'all', as_dict: b
         else:
             return datatsets
 
+
 def get_data_paths(**kwargs):
     # load params and config
     data_param, _ = get_data_and_config(**kwargs)
