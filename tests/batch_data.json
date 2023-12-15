@@ -1,0 +1,17 @@
+{
+    "foo": {
+        "parameters": {
+            "foo_int": 42,
+            "foo_float": 13.12,
+            "foo_string": "bar",
+            "foo_float_array": [1.1, 2.2, 3.3],
+            "foo_bool": true,
+            "foo_time": "2019-06-13T14:00:00Z",
+            "foo_enum": "bar"
+
+        },
+        "data": {
+            "iris": "./tests/batch*.csv"
+        }
+    }
+}

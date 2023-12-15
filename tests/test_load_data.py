@@ -38,3 +38,16 @@ def test_load_single_dataset():
     # make sure it's a dataframe
     assert isinstance(iris, pd.DataFrame)
     assert iris.shape == (150, 5)
+
+
+def test_load_batched_csv():
+    # use the batch_data.json3
+    args = kwargs.copy()
+    args['PARAM_FILE'] = base / 'batch_data.json'
+
+    # load the batched data
+    iris = get_data('iris', **args)
+
+    # this should result in a single dataframe with identical shape (like above)
+    assert isinstance(iris, pd.DataFrame)
+    assert iris.shape == (150, 5)
