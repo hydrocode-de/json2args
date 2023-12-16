@@ -1,0 +1,8 @@
+{
+    "arange": {
+        "data": {
+            "arr": "./tests/arrays/arange.dat",
+            "batch_arr": "./tests/arrays/batch*/arange.dat" 
+        } 
+    }
+}

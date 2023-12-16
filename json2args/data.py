@@ -58,7 +58,11 @@ def _preload_dataset(key: str, value: str, data_conf: dict):
         if len(paths) == 1:
             return np.loadtxt(paths[0])
         else:
-            np.column_stack([np.loadtxt(path) for path in paths])
+            # first try a concat
+            try:
+                return np.concatenate([np.loadtxt(path) for path in paths])
+            except ValueError:
+                return np.column_stack([np.loadtxt(path) for path in paths])
     
     # CSV
     elif ext == '.csv':
