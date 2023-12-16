@@ -2,7 +2,9 @@
     "arange": {
         "data": {
             "arr": "./tests/arrays/arange.dat",
-            "batch_arr": "./tests/arrays/batch*/arange.dat" 
+            "batch_arr": "./tests/arrays/batch*/arange.dat",
+            "json-data": "./tests/json-data/arbitrary.json",
+            "json-batch-data": "./tests/json-data/logfile_*.json"
         } 
     }
 }
