@@ -88,16 +88,16 @@ def test_load_single_array():
 
     assert arr.shape == (30, 5)
     assert arr.flatten()[0] == 0
-    assert arr.flatten()[-1] == 149.
+    assert arr.flatten()[-1] == 149
     assert arr[4, 1] == 21              # 4 * 5 + 1
 
 
-def test_load_batched_nc():
+def test_load_batched_array():
     # load the batched array
     arr = get_data('batch_arr', **arrays)
 
     # run exactly the same asserts as for the single load
     assert arr.shape == (30, 5)
     assert arr.flatten()[0] == 0
-    assert arr.flatten()[-1] == 149.
+    assert arr.flatten()[-1] == 149
     assert arr[4, 1] == 21              # 4 * 5 + 1

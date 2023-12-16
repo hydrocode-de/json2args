@@ -1,0 +1,6 @@
+
+		begin
+      f = addfile("/Users/mirko/Library/CloudStorage/Dropbox/python/json2args/tests/era5_march.nc","r")
+      print(f)
+		end
+    
