@@ -102,3 +102,26 @@ def test_load_batched_array():
     # assert arr.flatten()[-1] == 149  # this can fail as the order is not guaranteed!
     assert 149 in arr.flatten()
     assert arr[4, 1] == 21              # 4 * 5 + 1
+
+
+def test_load_single_json():
+    # preload the arbitrary json directly
+    data = get_data('json-data', **arrays)
+
+    assert isinstance(data, dict)
+    assert "is a test file" in data['info']
+
+
+def test_load_batched_json():
+    # preload the logfiles 
+    logs = get_data('json-batch-data', **arrays)
+
+    # this will be a list of two dicts
+    assert isinstance(logs, list)
+    assert len(logs) == 2
+
+    # glue the events together
+    events = logs[0]['events'] + logs[1]['events']
+    assert len(events) == 4
+    assert isinstance(events[0], dict)
+    assert any([el["id"] == 3 for el in events])

@@ -1,0 +1,13 @@
+{
+    "day": "1998-01-01",
+    "events": [
+        {
+            "id": 1,
+            "message": "First Event"
+        },
+        {
+            "id": 2,
+            "message": "Second event"
+        }
+    ]
+}
