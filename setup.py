@@ -31,6 +31,6 @@ setup(
     install_requires=requirements(),
     extras_require={
         'tests': ['pytest', 'pytest-cov'],
-        'data': ['"numpy<2.0"', 'pandas', 'polars', 'pyarrow', 'xarray', 'netCDF4', 'dask']
+        'data': ['numpy<2.0.0', 'pandas', 'polars', 'pyarrow', 'xarray', 'netCDF4', 'dask']
     }
 )
