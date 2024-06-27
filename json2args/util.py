@@ -4,13 +4,34 @@ import json
 from yaml import load, Loader
 
 
-CONF_FILE = '/src/tool.yml'
-PARAM_FILE = '/in/inputs.json'
+CONF_FILE = ['/src/tool.yml']
+PARAM_FILES = ['/in/input.json', '/in/input.json']
 
 def _get_env(**kwargs) -> dict:
+    # get the config file
+    conf = kwargs.get('CONF_FILE', os.environ.get('CONF_FILE'))
+
+    # if conf is none, try any of the CONF_FILE
+    if not conf:
+        for c in CONF_FILE:
+            conf = c
+            if os.path.exists(c):
+                break
+
+
+    # get the input file 
+    param_file = kwargs.get('PARAM_FILE', os.environ.get('PARAM_FILE'))
+
+    # test all param files until we find one
+    if param_file is None:
+        for p in PARAM_FILES:
+            param_file = p
+            if os.path.exists(p):
+                break
+
     return {
-        'conf_file': kwargs.get('CONF_FILE', os.environ.get('CONF_FILE', CONF_FILE)),
-        'param_file': kwargs.get('PARAM_FILE', os.environ.get('PARAM_FILE', PARAM_FILE))
+        'conf_file': conf,
+        'param_file': param_file
     }
 
 
