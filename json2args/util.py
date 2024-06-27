@@ -5,7 +5,7 @@ from yaml import load, Loader
 
 
 CONF_FILE = ['/src/tool.yml']
-PARAM_FILES = ['/in/input.json', '/in/input.json']
+PARAM_FILES = ['/in/input.json', '/in/inputs.json']
 
 def _get_env(**kwargs) -> dict:
     # get the config file

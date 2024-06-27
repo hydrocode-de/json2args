@@ -42,7 +42,7 @@ def _preload_dataset(key: str, value: str, data_conf: dict):
     
     # otherwise the input is allowed - check if we have a wildcard
     if '*' in value:
-        paths = [Path(v).resolve() for v in glob(value)]
+        paths = sorted([Path(v).resolve() for v in glob(value)])
     else:
         paths = [Path(value).resolve()]
 
