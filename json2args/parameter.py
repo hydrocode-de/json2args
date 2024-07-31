@@ -2,6 +2,7 @@
 Use these tools inside the docker container to read and
 parse the tool configuration and the parameters.
 """
+from typing import Union
 from itertools import chain
 
 from dateutil.parser import parse, isoparse
@@ -74,7 +75,7 @@ def _parse_param(key: str, val: str, param_config: dict):
         return val
 
 
-def get_parameter(typed: bool = False, **kwargs) -> dict | BaseModel:
+def get_parameter(typed: bool = False, **kwargs) -> Union[dict, BaseModel]:
     # load params and config
     section, param, param_conf = get_param_and_config(**kwargs)
 
