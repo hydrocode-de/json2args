@@ -2,14 +2,14 @@
 Use these tools inside the docker container to read and
 parse the tool configuration and the parameters.
 """
-import os
-import json
 from itertools import chain
 
 from dateutil.parser import parse, isoparse
+from pydantic import BaseModel
 
 from json2args.exceptions import ToolConfigMissingError
 from json2args.util import get_param_and_config
+from json2args.typed import model_factory
 
 
 def _parse_param(key: str, val: str, param_config: dict):
@@ -74,9 +74,17 @@ def _parse_param(key: str, val: str, param_config: dict):
         return val
 
 
-def get_parameter(**kwargs) -> dict:
+def get_parameter(typed: bool = False, **kwargs) -> dict | BaseModel:
     # load params and config
-    param, param_conf = get_param_and_config(**kwargs)
+    section, param, param_conf = get_param_and_config(**kwargs)
+
+    # check if we use the typed version
+    if typed:
+        # build a model
+        Model = model_factory(section, param_conf)
+
+        # instantiate the model
+        return Model(**param)
 
     # container for parsed arguments
     kwargs = {}
