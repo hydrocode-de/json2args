@@ -1,3 +1,4 @@
 pyyaml
 python-dateutil
 typing-extensions
+pydantic
