@@ -66,7 +66,7 @@ def get_param_and_config(**kwargs) -> Tuple[dict, dict]:
     # find parameters section in input
     param = p[section]['parameters']
 
-    return param, param_conf
+    return section, param, param_conf
 
 
 

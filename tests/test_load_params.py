@@ -3,8 +3,9 @@ from pathlib import Path
 from datetime import datetime as dt
 
 import pytest
-from json2args.exceptions import ToolConfigMissingError
+from pydantic import BaseModel
 
+from json2args.exceptions import ToolConfigMissingError
 from json2args.util import get_param_and_config, _raw_read_files
 from json2args.parameter import _parse_param, get_param_and_config, get_parameter
 
@@ -61,7 +62,7 @@ def test_parse_literal():
 
 
 def test_fail_on_range_error():
-    params, params_conf = get_param_and_config(**kwargs)
+    _, params, params_conf = get_param_and_config(**kwargs)
 
     with pytest.raises(ValueError) as e:
         _parse_param('foo_int', 100, params_conf)
@@ -70,7 +71,7 @@ def test_fail_on_range_error():
 
 
 def test_fail_on_enum():
-    _, params_conf = get_param_and_config(**kwargs)
+    _, _, params_conf = get_param_and_config(**kwargs)
 
     with pytest.raises(ValueError) as e:
         _parse_param('foo_enum', 'noValidValue', params_conf)
@@ -79,7 +80,7 @@ def test_fail_on_enum():
 
 
 def test_missing_config():
-    _, params_conf = get_param_and_config(**kwargs)
+    _, _, params_conf = get_param_and_config(**kwargs)
 
     with pytest.raises(ToolConfigMissingError) as e:
         _parse_param('foo_missing', 'nan', params_conf)
@@ -101,3 +102,15 @@ def test_optional_and_default_values():
     assert 'foo_bool' in args
     assert args['foo_string'] == 'foo'  # not bar anymore
     assert args['foo_bool'] == False    # not True anymore 
+
+
+def test_pydantic_model():
+    # use the default kwargs
+    param = get_parameter(typed=True, **kwargs)
+
+    # assert this is a model
+    assert isinstance(param, BaseModel)
+
+    # check one number and the enum
+    assert param.foo_int == 42
+    assert param.foo_enum == 'bar'
