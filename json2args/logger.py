@@ -1,5 +1,17 @@
 import logging
 import os
+from pathlib import Path
+
+# set some paths
+processing_path = Path(os.environ.get('PROCESSING_LOG', '/out/processing.log'))
+error_path = Path(os.environ.get('ERROR_LOG', '/out/errors.log'))
+
+# check if the paths exist
+if not processing_path.parent.exists():
+    processing_path = Path('./').resolve() / 'processing.log'
+
+if not error_path.parent.exists():
+    error_path = Path('./').resolve() / 'errors.log'
 
 # create a new logger
 logger = logging.getLogger('tools')
@@ -8,10 +20,10 @@ logger = logging.getLogger('tools')
 logger.setLevel(logging.DEBUG)
 
 # create a file handler for all messages
-processing_handler = logging.FileHandler('/out/processing.log')
+processing_handler = logging.FileHandler(str(processing_path))
 
 # create a file handler for warnings and errors
-error_handler = logging.FileHandler('/out/errors.log')
+error_handler = logging.FileHandler(str(error_path))
 error_handler.setLevel(logging.WARNING)
 
 # create a console handler for all messages
